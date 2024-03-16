@@ -1,0 +1,39 @@
+services:
+  db:
+    image: mysql:8.0.27
+    command: '--default-authentication-plugin=mysql_native_password'
+    volumes:
+      - ./db_data:/var/lib/mysql
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=somewordpress
+      - MYSQL_DATABASE=wordpress
+      - MYSQL_USER=wordpress
+      - MYSQL_PASSWORD=wordpress
+    networks:
+      - app
+
+  wordpress:
+    image: wordpress:latest
+    volumes:
+      - ./wp_data:/var/www/html
+    restart: unless-stopped
+    environment:
+      - WORDPRESS_DB_HOST=db
+      - WORDPRESS_DB_USER=wordpress
+      - WORDPRESS_DB_PASSWORD=wordpress
+      - WORDPRESS_DB_NAME=wordpress
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.wordpress.rule=Host(`wordpress.localhost`)
+      - traefik.http.routers.wordpress.entrypoints=http
+      # - traefik.http.routers.wordpress.tls=true
+      # - traefik.http.routers.wordpress.tls.certresolver=letsencrypt
+    networks:
+      - traefik
+      - app
+
+networks:
+  app:
+  traefik:
+    external: true
