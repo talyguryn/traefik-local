@@ -28,6 +28,34 @@ services:
     networks:
       - traefik
 
+  prometheus:
+    image: prom/prometheus:v2.31.1
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.prometheus.rule=Host(`prometheus.local`)
+      - traefik.http.services.prometheus.loadbalancer.server.port=9090
+    networks:
+      - traefik
+
+  grafana:
+    image: grafana/grafana:8.3.3
+    volumes:
+      - ./data/grafana:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.grafana.rule=Host(`grafana.local`)
+      - traefik.http.services.grafana.loadbalancer.server.port=3000
+    networks:
+      - traefik
 
 networks:
   traefik:

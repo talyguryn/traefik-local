@@ -9,12 +9,22 @@ entryPoints:
     address: ":80"
   # https:
   #   address: ":443"
+  metrics:
+    address: ":8082"
 
 providers:
   docker:
     defaultRule: "Host(`{{ trimPrefix `/` .Name }}.localhost`)"
     exposedByDefault: false
 
+metrics:
+  prometheus:
+    entryPoint: metrics
+    buckets:
+      - 0.1
+      - 0.3
+      - 1.2
+      - 5.0
 # certificatesResolvers:
 #   letsencrypt:
 #     acme:
