@@ -1,11 +1,11 @@
-version: '3'
+version: "3"
 
 services:
   whoami:
     image: containous/whoami
     labels:
       - traefik.enable=true
-      - traefik.http.routers.whoami.rule=Host(`whoami.localhost`)
+      - traefik.http.routers.whoami.rule=Host(`whoami.local`)
       - traefik.http.routers.whoami.entrypoints=http
       # - traefik.http.routers.whoami.service=whoami
       # - traefik.http.services.whoami.loadbalancer.server.port=80

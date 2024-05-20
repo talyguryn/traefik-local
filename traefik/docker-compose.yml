@@ -9,7 +9,7 @@ services:
       # - traefik.http.routers.to-https.middlewares=to-https
 
       - traefik.enable=true
-      - traefik.http.routers.traefik.rule=Host(`traefik.localhost`)
+      - traefik.http.routers.traefik.rule=Host(`traefik.local`)
       - traefik.http.routers.traefik.entrypoints=http
       - traefik.http.routers.traefik.service=api@internal
       # - traefik.http.routers.traefik.middlewares=auth
